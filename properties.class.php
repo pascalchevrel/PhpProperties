@@ -4,8 +4,8 @@
  *
  * Licence: MPL 2/GPL 2.0/LGPL 2.1
  * Author: Pascal Chevrel, Mozilla <pascal@mozilla.com>, Mozilla
- * Date : 2012-12-05
- * version: 1.0
+ * Date : 2012-12-06
+ * version: 1.1
  * Description:
  * Class to extract key/value pairs from a java/js style .properties file
  * @returns array
@@ -38,7 +38,7 @@ class Properties
         return $source;
     }
 
-    public function getData()
+    public function extractData()
     {
         $analysis = array();
 
@@ -156,5 +156,15 @@ class Properties
         }
 
         return $analysis;
+    }
+
+    public function getData()
+    {
+        $source = $this->extractData();
+        $data = array();
+        foreach ($source as $value) {
+            $data[$value[0]] = $value[1];
+        }
+        return $data;
     }
 }

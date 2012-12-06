@@ -1,10 +1,22 @@
 <?php
-
 require __DIR__ . '/properties.class.php';
-require __DIR__ . '/helpers.php';
+
+header('Content-type: text/plain; charset=UTF-8');
+
+$file = __DIR__ . '/test.properties';
+
+echo "Properties example source:\n";
+echo "--------------------------\n";
+readfile($file);
 
 $source = new \xformat\Properties('test.properties');
 
-echo array_to_table($source->getData());
-dump($source->getData());
+echo "Extracted data:\n";
+echo "---------------\n";
+var_dump($source->getData());
+
+
+echo "\nFull Extracted data with comments:\n";
+echo "----------------------------------\n";
+var_dump($source->extractData());
 
