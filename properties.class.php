@@ -8,9 +8,9 @@
  * version: 1.1
  * Description:
  * Class to extract key/value pairs from a java/js style .properties file
- * @returns array
+ * Supports comment extraction and multiline properties
  *
-*/
+ */
 
 namespace xformat;
 
