@@ -16,17 +16,20 @@ namespace xformat;
 
 class Properties
 {
-    public $file;
+    public $source;
+    private $parsed_source;
+
 
     public function __construct($file=false)
     {
         $this->source = is_file($file) ? $file : false;
+        if($file) {
+            $this->parsed_source = $this->fileToArray();
+        }
     }
 
     private function fileToArray()
     {
-        if (!$this->source) return false;
-
         $source = file($this->source, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         $source = array_map(
             function($elm){
@@ -36,12 +39,37 @@ class Properties
         return $source;
     }
 
+    public function analyseSource()
+    {
+        $analysis = array();
+        foreach ($this->parsed_source as $line_nb => $line) {
+
+            // Line comments
+            if (substr($line[0], 0, 1) == '#') {
+                $analysis[$line_nb] = 'comment';
+                continue;
+            }
+
+            // Property name, check for escaped equal sign
+            if (substr_count($line, '=') > substr_count($line, '\=')) {
+                $analysis[$line_nb] = 'propertyName';
+                continue;
+            }
+
+            // Multiline data
+            if (substr_count($line, '=') ==0) {
+                $analysis[$line_nb] = 'multilineData';
+                continue;
+            }
+        }
+
+        return $analysis;
+    }
+
     public function extractProperties()
     {
-        $source = $this->fileToArray();
-
-        // We parse the $source array, remove white space and delimiting quotes, skip comments
-        foreach ($source as $value) {
+        // We parse the $parsed_source array, remove white space and delimiting quotes, skip comments
+        foreach ($this->parsed_source as $value) {
             if (substr($value[1], 0, 1) == '#') continue;
 
             $temp = explode('=', $value, 2);
