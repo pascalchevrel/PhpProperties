@@ -19,7 +19,6 @@ class Properties
     public $source;
     private $parsed_source;
 
-
     public function __construct($file=false)
     {
         $this->source = is_file($file) ? $file : false;
@@ -57,7 +56,7 @@ class Properties
             }
 
             // Multiline data
-            if (substr_count($line, '=') ==0) {
+            if (substr_count($line, '=') == 0) {
                 $analysis[$line_nb] = 'multilineData';
                 continue;
             }
@@ -66,6 +65,13 @@ class Properties
         return $analysis;
     }
 
+    /*
+     * This method is a quick and dirty parser that does a one-pass analyse
+     * of the properties file.
+     * Its logic is being moved to specialized methods that will allow a
+     * multipass analysis of properties file so as to handle multiline properties,
+     * comments and other edge cases
+     */
     public function extractProperties()
     {
         // We parse the $parsed_source array, remove white space and delimiting quotes, skip comments
@@ -73,7 +79,10 @@ class Properties
             if (substr($value[1], 0, 1) == '#') continue;
 
             $temp = explode('=', $value, 2);
-            $temp = array_map(function($elm){ return trim($elm);}, $temp);
+            $temp = array_map(
+                function($elm){
+                    return trim($elm);
+                }, $temp);
 
             if (count($temp) == 2) {
                 if (substr($temp[1], -1) == '"' && substr($temp[1], 0, 1) == '"') {
