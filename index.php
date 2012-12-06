@@ -5,6 +5,6 @@ require __DIR__ . '/helpers.php';
 
 $source = new \xformat\Properties('test.properties');
 
-echo array_to_table($source->analyseSource());
-dump($source->analyseSource());
+echo array_to_table($source->getData());
+dump($source->getData());
 

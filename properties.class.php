@@ -38,7 +38,7 @@ class Properties
         return $source;
     }
 
-    public function analyseSource()
+    public function getData()
     {
         $analysis = array();
 
@@ -156,22 +156,5 @@ class Properties
         }
 
         return $analysis;
-    }
-
-    public function rebuildSource() {
-        $source = $source->analyseSource();
-
-        $comments = array();
-
-        foreach ($source as $k => $v) {
-            if ($v == 'comment') {
-                $comments[] = $k;
-                continue;
-            }
-
-            if ($v == 'propertyName') {
-
-            }
-        }
     }
 }
