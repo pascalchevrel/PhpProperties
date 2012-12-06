@@ -22,17 +22,27 @@ class Properties
     {
         $this->source = is_file($file) ? $file : false;
     }
-    
-    public function propertiesToArray()
+
+    private function fileToArray()
     {
-        if (!$this->source) return array();
+        if (!$this->source) return false;
 
-        $source = file($this->source);
+        $source = file($this->source, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $source = array_map(
+            function($elm){
+                return trim($elm);
+            }, $source);
 
-        // We parse the $source array, remove white space and delimiting quotes, skip comments and blank lines
+        return $source;
+    }
+
+    public function extractProperties()
+    {
+        $source = $this->fileToArray();
+
+        // We parse the $source array, remove white space and delimiting quotes, skip comments
         foreach ($source as $value) {
-            if (substr($value[1], 0, 1) == false || substr($value[1], 0, 1) == '#')
-                continue;
+            if (substr($value[1], 0, 1) == '#') continue;
 
             $temp = explode('=', $value, 2);
             $temp = array_map(function($elm){ return trim($elm);}, $temp);
