@@ -1,11 +1,14 @@
 <?php
 
 function array_to_table($arr) {
-    $list = '<table border="1" style="border-collapse:collapse;">';
-    foreach ($arr as $k => $v) {
-        $list .= "<tr><th>$k</th><td>$v</td></tr>";
+    $list = '<table border="1" style="border-collapse:collapse;">
+                <tr><th>Key</th><th>Value</th><th>Comment</th></tr>';
+
+    foreach ($arr as $v) {
+        $v[2] = isset($v[2]) ? $v[2] : '';
+        $list .= "<tr><td>$v[0]</td><td>$v[1]</td><td>$v[2]</td></tr>";
     }
-    $list .= '<table>';
+    $list .= '</table>';
     return $list;
 }
 
