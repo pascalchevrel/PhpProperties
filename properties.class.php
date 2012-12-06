@@ -16,22 +16,21 @@ namespace xformat;
 
 class Properties
 {
-    public $source;
+    public  $source;
     private $parsed_source;
 
     public function __construct($file=false)
     {
         $this->source = is_file($file) ? $file : false;
-        if($file) {
+        if ($file)
             $this->parsed_source = $this->fileToArray();
-        }
     }
 
     private function fileToArray()
     {
         $source = file($this->source, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         $source = array_map(
-            function($elm){
+            function($elm) {
                 return trim($elm);
             }, $source);
 
@@ -56,12 +55,14 @@ class Properties
 
                 $temp = explode('=', $line, 2);
                 $temp = array_map(
-                    function($elm){
+                    function($elm) {
                         return trim($elm);
                     }, $temp);
 
                 if (count($temp) == 2) {
-                    if (substr($temp[1], -1) == '"' && substr($temp[1], 0, 1) == '"') {
+                    if (substr($temp[1], -1) == '"'
+                        && substr($temp[1], 0, 1) == '"')
+                    {
                         $temp[1] = substr($temp[1], 1, -1);
                     }
                     $analysis[$line_nb] = array($temp[0], $temp[1]);
@@ -77,33 +78,37 @@ class Properties
             }
         }
 
-
         /* Second pass, we associate comments to entities */
 
         // count # of comments
-        $comment_count = 0;
+        $counter = 0;
         foreach ($analysis as $v) {
-            if ($v[0] == 'comment') $comment_count++;
+            if ($v[0] == 'comment') $counter++;
         }
 
-        while($comment_count > 0) {
+        while ($counter > 0) {
 
             foreach ($analysis as $line_nb => $line) {
 
-                if ($line[0] == 'comment' && isset($analysis[$line_nb+1][0]) && $analysis[$line_nb+1][0] == 'comment') {
+                if ($line[0] == 'comment'
+                    && isset($analysis[$line_nb+1][0])
+                    && $analysis[$line_nb+1][0] == 'comment')
+                {
                     $analysis[$line_nb][1] .= ' ' . $analysis[$line_nb+1][1];
                     $analysis[$line_nb+1][0] = 'erase';
                     break;
-                } elseif ($line[0] == 'comment' && isset($analysis[$line_nb+1][0]) && $analysis[$line_nb+1][0] != 'multiline') {
+                } elseif ($line[0] == 'comment'
+                          && isset($analysis[$line_nb+1][0])
+                          && $analysis[$line_nb+1][0] != 'multiline')
+                {
                     $analysis[$line_nb+1][2] = $line[1];
                     $analysis[$line_nb][0] = 'erase';
                 }
             }
 
-            $comment_count = 0;
-
+            $counter = 0;
             foreach ($analysis as $k => $v) {
-                if ($v[0] == 'comment') $comment_count++;
+                if ($v[0] == 'comment') $counter++;
                 if ($v[0] == 'erase') unset($analysis[$k]);
             }
 
@@ -125,10 +130,8 @@ class Properties
             if ($v[0] == 'multiline') $counter++;
         }
 
-        while($counter > 0) {
-
+        while ($counter > 0) {
             foreach ($analysis as $line_nb => $line) {
-
                 if ($line[0] == 'multiline'
                     && isset($analysis[$line_nb-1][0])
                     && $analysis[$line_nb-1][0] != 'multiline'
@@ -141,7 +144,6 @@ class Properties
             }
 
             $counter = 0;
-
             foreach ($analysis as $k => $v) {
                 if ($v[0] == 'multiline') $counter++;
                 if ($v[0] == 'erase') unset($analysis[$k]);
@@ -161,10 +163,12 @@ class Properties
     public function getData()
     {
         $source = $this->extractData();
-        $data = array();
+        $data   = array();
+
         foreach ($source as $value) {
             $data[$value[0]] = $value[1];
         }
+
         return $data;
     }
 }
