@@ -13,6 +13,11 @@
             "role": "Developer"
         }
     ],
+    "autoload": {
+        "psr-0": {
+            "pascalc": "src"
+        }
+    },
     "require": {
         "php": ">=5.3.0"
     }
