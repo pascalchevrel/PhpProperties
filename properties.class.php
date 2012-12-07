@@ -5,7 +5,7 @@
  * Licence: MPL 2/GPL 2.0/LGPL 2.1
  * Author: Pascal Chevrel, Mozilla <pascal@mozilla.com>, Mozilla
  * Date : 2012-12-07
- * version: 1.2
+ * version: 1.0
  * Description:
  * Class to extract key/value pairs from a java/js style .properties file
  * Supports comment extraction and multiline properties
