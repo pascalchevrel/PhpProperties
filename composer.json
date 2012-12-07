@@ -1,9 +1,9 @@
 {
-    "name": "pascalc/PhpProperties",
+    "name": "pascalc/php-properties",
     "type": "library",
     "description": "Extract data in .properties files for PHP > 5.3.0",
     "keywords": ["properties","parser"],
-    "homepage": "https://github.com/pascalchevrel/php-properties",
+    "homepage": "https://github.com/pascalchevrel/PhpProperties",
     "license": "MPL 2/GPL 2.0/LGPL 2.1",
     "authors": [
         {
