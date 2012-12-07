@@ -13,7 +13,7 @@ $source = new \xformat\Properties('test.properties');
 
 echo "Extracted data:\n";
 echo "---------------\n";
-var_dump($source->getData());
+var_dump($source->getProperties());
 
 
 echo "\nFull Extracted data with comments:\n";
