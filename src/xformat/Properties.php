@@ -49,8 +49,7 @@ class Properties
         /* First pass, we categorize each line */
         foreach ($this->parsed_source as $line_nb => $line) {
 
-            // Line comments
-            if (substr($line[0], 0, 1) == '#') {
+            if ($this->stringStart('#', $line)) {
                 $analysis[$line_nb] = array('comment', trim(substr($line, 1)));
                 continue;
             }
@@ -62,10 +61,7 @@ class Properties
                 $temp = $this->trimArrayElements($temp);
 
                 if (count($temp) == 2) {
-                    if (substr($temp[1], -1) == '"'
-                        && substr($temp[1], 0, 1) == '"') {
-                        $temp[1] = substr($temp[1], 1, -1);
-                    }
+                    $temp[1] = $this->removeQuotes($temp[1]);
                     $analysis[$line_nb] = array('property', $temp[0], $temp[1]);
                 }
                 unset($temp);
@@ -100,7 +96,7 @@ class Properties
                 }
             }
 
-			$counter  = $this->getNumberLinesMatching('comment', $analysis);
+            $counter  = $this->getNumberLinesMatching('comment', $analysis);
             $analysis = $this->deleteFields('erase', $analysis);
         }
 
@@ -155,6 +151,20 @@ class Properties
         }
         
         return $tablo;
+    }
+
+
+    public static function stringStart($needle, $string) {
+        return (substr($string, 0, 1) == $needle) ?  true : false; 
+    }
+
+    public static function removeQuotes($string)
+    {
+        if (substr($string, -1) == '"' && substr($string, 0, 1) == '"') {
+            $string = substr($string, 1, -1);
+        }
+        
+        return $string; 
     }
 
     public static function trimArrayElements($tablo)
