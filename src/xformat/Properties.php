@@ -101,7 +101,7 @@ class Properties
             }
 
 			$counter  = $this->getNumberLinesMatching('comment', $analysis);
-            $analysis = $this->deleteField('erase', $analysis);
+            $analysis = $this->deleteFields('erase', $analysis);
         }
 
         /* Third pass, we merge multiline strings */
@@ -124,7 +124,7 @@ class Properties
             }
 
             $counter  = $this->getNumberLinesMatching('multiline', $analysis);
-            $analysis = $this->deleteField('erase', $analysis);
+            $analysis = $this->deleteFields('erase', $analysis);
         }
 
         /* Step 4, we clean up strings from escaped characters in properties */
@@ -178,7 +178,7 @@ class Properties
         return $counter;
     }
 
-    private function deleteField($field, $analysis)
+    private function deleteFields($field, $analysis)
     {
         foreach ($analysis as $k => $v) {
             if ($v[0] == $field) { 
