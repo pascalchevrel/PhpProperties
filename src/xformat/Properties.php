@@ -36,9 +36,10 @@ class Properties
 
     private function fileToArray()
     {
-        $source = file($this->source, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $source = file($this->source, 
+                       FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         $source = array_map(
-            function($elm) {
+            function ($elm) {
                 return trim($elm);
             }, $source);
 
@@ -63,14 +64,13 @@ class Properties
 
                 $temp = explode('=', $line, 2);
                 $temp = array_map(
-                    function($elm) {
+                    function ($elm) {
                         return trim($elm);
                     }, $temp);
 
                 if (count($temp) == 2) {
                     if (substr($temp[1], -1) == '"'
-                        && substr($temp[1], 0, 1) == '"')
-                    {
+                        && substr($temp[1], 0, 1) == '"') {
                         $temp[1] = substr($temp[1], 1, -1);
                     }
                     $analysis[$line_nb] = array('property', $temp[0], $temp[1]);
@@ -91,7 +91,9 @@ class Properties
         // count # of comments
         $counter = 0;
         foreach ($analysis as $v) {
-            if ($v[0] == 'comment') $counter++;
+            if ($v[0] == 'comment') { 
+                $counter++; 
+            }
         }
 
         while ($counter > 0) {
@@ -100,15 +102,13 @@ class Properties
 
                 if ($line[0] == 'comment'
                     && isset($analysis[$line_nb+1][0])
-                    && $analysis[$line_nb+1][0] == 'comment')
-                {
+                    && $analysis[$line_nb+1][0] == 'comment') {
                     $analysis[$line_nb][1] .= ' ' . $analysis[$line_nb+1][1];
                     $analysis[$line_nb+1][0] = 'erase';
                     break;
                 } elseif ($line[0] == 'comment'
                           && isset($analysis[$line_nb+1][0])
-                          && $analysis[$line_nb+1][0] == 'property')
-                {
+                          && $analysis[$line_nb+1][0] == 'property') {
                     $analysis[$line_nb+1][3] = $line[1];
                     $analysis[$line_nb][0] = 'erase';
                 }
@@ -116,8 +116,13 @@ class Properties
 
             $counter = 0;
             foreach ($analysis as $k => $v) {
-                if ($v[0] == 'comment') $counter++;
-                if ($v[0] == 'erase') unset($analysis[$k]);
+                if ($v[0] == 'comment') {
+                    $counter++;
+                }
+                
+                if ($v[0] == 'erase') { 
+                    unset($analysis[$k]);
+                }
             }
 
             $analysis = array_values($analysis);
@@ -135,15 +140,16 @@ class Properties
         // count # of multilines
         $counter = 0;
         foreach ($analysis as $v) {
-            if ($v[0] == 'multiline') $counter++;
+            if ($v[0] == 'multiline') {
+                $counter++;
+            }
         }
 
         while ($counter > 0) {
             foreach ($analysis as $line_nb => $line) {
                 if ($line[0] == 'multiline'
                     && isset($analysis[$line_nb-1][0])
-                    && $analysis[$line_nb-1][0] == 'property')
-                {
+                    && $analysis[$line_nb-1][0] == 'property') {
                     $analysis[$line_nb-1][2] .= ' ' . trim($line[2]);
                     $analysis[$line_nb][0] = 'erase';
                     break;
@@ -152,8 +158,12 @@ class Properties
 
             $counter = 0;
             foreach ($analysis as $k => $v) {
-                if ($v[0] == 'multiline') $counter++;
-                if ($v[0] == 'erase') unset($analysis[$k]);
+                if ($v[0] == 'multiline') {
+                    $counter++;
+                }
+                if ($v[0] == 'erase') {
+                    unset($analysis[$k]);
+                }
             }
 
             $analysis = array_values($analysis);
@@ -164,7 +174,7 @@ class Properties
             $analysis[$k][2] = str_replace('\=', '=', $v[2]);
         }
 
-        /* Step 5, we only have properties now, let's removed field 0 that is redondant */
+        /* Step 5, we only have properties now, remove redondant field 0 */
         foreach ($analysis as $k => $v) {
             array_splice($analysis[$k], 0, 1);
         }
@@ -174,10 +184,12 @@ class Properties
 
     public function getProperties($file=false)
     {
-        if ($file) $this->setSourceFile($file);
+        if ($file) {
+            $this->setSourceFile($file);
+        }
 
-        $source = $this->extractData();
-        $data   = array();
+        $source  = $this->extractData();
+        $data    = array();
 
         foreach ($source as $value) {
             $data[$value[0]] = $value[1];
