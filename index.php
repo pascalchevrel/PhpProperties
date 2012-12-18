@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/properties.class.php';
+require __DIR__ . '/src/xformat/Properties.php';
 
 header('Content-type: text/plain; charset=UTF-8');
 
