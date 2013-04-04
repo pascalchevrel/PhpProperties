@@ -39,6 +39,7 @@ class Properties
         $source = file($this->source, 
                        FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         $source = $this->trimArrayElements($source);
+        $source = array_filter($source);
         return $source;
     }
 
@@ -73,13 +74,11 @@ class Properties
                 $analysis[$line_nb] = array('multiline', '', $line);
                 continue;
             }
-        }
 
+        }
         /* Second pass, we associate comments to entities */
         $counter = $this->getNumberLinesMatching('comment', $analysis);
-
         while ($counter > 0) {
-
             foreach ($analysis as $line_nb => $line) {
 
                 if ($line[0] == 'comment'
